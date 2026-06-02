@@ -96,6 +96,18 @@
       .btn-decrypt:hover {
         background-color: #218838;
       }
+
+      /* Style for the new copy button */
+      .btn-copy {
+        background-color: #df0c0c;
+        color: white;
+        width: 100%;
+        margin-top: 8px;
+      }
+
+      .btn-copy:hover {
+        background-color: #df0c0c;
+      }
     </style>
   </head>
   <body>
@@ -115,6 +127,8 @@
       <div class="form-group">
         <label for="outputText">Output Text:</label>
         <textarea id="outputText" readonly placeholder="Result will appear here..."></textarea>
+        <!-- Added Copy Button Below Output Box -->
+        <button id="copyBtn" class="btn-copy" onclick="copyToClipboard()">Copy to Clipboard</button>
       </div>
     </div>
 
@@ -180,6 +194,31 @@
         }
 
         document.getElementById("outputText").value = output;
+
+        // Reset copy button text when new text is generated
+        document.getElementById("copyBtn").innerText = "Copy to Clipboard";
+      }
+
+      // New function to handle clipboard copying
+      function copyToClipboard() {
+        const outputText = document.getElementById("outputText");
+
+        if (!outputText.value) return; // Do nothing if empty
+
+        navigator.clipboard
+          .writeText(outputText.value)
+          .then(() => {
+            const copyBtn = document.getElementById("copyBtn");
+            copyBtn.innerText = "Copied!"; // Visual confirmation
+
+            // Revert button text back after 2 seconds
+            setTimeout(() => {
+              copyBtn.innerText = "Copy to Clipboard";
+            }, 2000);
+          })
+          .catch((err) => {
+            console.error("Failed to copy text: ", err);
+          });
       }
     </script>
   </body>
